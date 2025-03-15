@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./ProductList.css";
 import CartItem from "./CartItem";
 import { addItem } from "./CartSlice";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 function ProductList({ onHomeClick }) {
   const [showCart, setShowCart] = useState(false);
   const [addedToCart, setAddedToCart] = useState({});
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.items);
+  const dispatch = useDispatch();
   const plantsArray = [
     {
       category: "Air Purifying Plants",
@@ -297,6 +298,14 @@ const dispatch = useDispatch();
       [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
     }));
   };
+  const calculateQuantity = () => {
+    let total = 0;
+    cart.forEach(item=>{
+      total += parseFloat(item.quantity)
+    })
+    return total;
+  };
+  
   return (
     <div>
       <div className="navbar" style={styleObj}>
@@ -332,6 +341,7 @@ const dispatch = useDispatch();
                   height="68"
                   width="68"
                 >
+                  <text x="70" y="160" fontSize="100" fill="white" fontWeight="bold">{calculateQuantity()}</text>
                   <rect width="156" height="156" fill="none"></rect>
                   <circle cx="80" cy="216" r="12"></circle>
                   <circle cx="184" cy="216" r="12"></circle>
@@ -344,6 +354,7 @@ const dispatch = useDispatch();
                     stroke-width="2"
                     id="mainIconPathAttribute"
                   ></path>
+                   
                 </svg>
               </h1>
             </a>
